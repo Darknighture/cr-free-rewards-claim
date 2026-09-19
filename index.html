@@ -382,32 +382,58 @@ footer .foot-ico{color:#cfd8e5;margin-right:6px;}
     .hero{padding:1.3rem 1.2rem;border-radius:22px;}
     .hero h1{font-size:1.4rem;}
     .crown{width:48px;height:48px;font-size:1.25rem;border-radius:15px;}
+
+    /* ---- 卡片式布局：覆盖桌面端百分比列宽（同优先级、后声明生效） ---- */
     .table-scroll{overflow:visible;}
-    .reward-table{min-width:0;}
+    .reward-table{min-width:0;table-layout:auto;}
     .reward-table thead{display:none;}
-    .reward-table,.reward-table tbody,.reward-table tr,.reward-table td{display:block;width:auto;}
+    .reward-table,.reward-table tbody{display:block;}
     .reward-table tbody tr{
+        display:grid;
+        width:auto;
+        grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+        grid-template-areas:
+            "name name"
+            "preview preview"
+            "type status"
+            "expiry link";
+        gap:.55rem 1rem;
         border:1px solid var(--line);
         border-radius:18px;
         margin:.75rem;
-        padding:.35rem .95rem;
+        padding:.85rem 1rem .95rem;
         background:#fff;
         box-shadow:var(--shadow-sm);
     }
+    .reward-table tbody tr.row-expired{background:#fcfcfd;}
     .reward-table td{
-        display:flex;align-items:center;justify-content:space-between;
-        gap:1rem;text-align:right;padding:.6rem 0;
-        border-bottom:1px dashed #eef2f8;
+        display:flex;flex-direction:column;align-items:flex-start;gap:5px;
+        width:auto;min-width:0;padding:0;text-align:left;
+        border-bottom:0;
     }
-    .reward-table tbody tr td:last-child{border-bottom:0;padding-bottom:.7rem;}
     .reward-table td::before{
         content:attr(data-label);
-        font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
-        color:#98a4b4;text-align:left;flex:none;
+        font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+        color:#9aa6b4;
     }
-    .reward-table td:nth-child(1){padding-top:.9rem;}
-    .reward-table td:nth-child(2),.reward-table td:nth-child(1){justify-content:flex-start;}
-    .reward-name{text-align:left;}
+    /* 名称：整行、不设标签，正常横向折行 */
+    .reward-table td:nth-child(1){grid-area:name;width:auto;padding-top:0;}
+    .reward-table td:nth-child(1)::before{display:none;}
+    .reward-table td:nth-child(2){grid-area:preview;width:auto;}
+    .reward-table td:nth-child(2)::before{display:none;}
+    .reward-table td:nth-child(3){grid-area:type;width:auto;}
+    .reward-table td:nth-child(4){grid-area:link;width:auto;align-items:flex-end;}
+    .reward-table td:nth-child(5){grid-area:expiry;width:auto;}
+    .reward-table td:nth-child(6){grid-area:status;width:auto;align-items:flex-end;}
+
+    .reward-name{font-size:.98rem;line-height:1.45;align-items:flex-start;white-space:normal;}
+    .reward-name span{flex:1;min-width:0;}
+    .preview-gallery{justify-content:flex-start;}
+    .preview-img,.preview-placeholder{width:54px;height:54px;}
+    .preview-placeholder{font-size:1.3rem;}
+    .expiry{align-items:flex-start;}
+    .link-cell{align-items:flex-end;}
+
     .toolbar{padding:0;}
     .search{max-width:none;}
     .stats{width:100%;}
@@ -534,7 +560,7 @@ const REWARDS_DATA = [
     {id:"reward_049",name:"赛季代币250",en:"250 Season Tokens",imgSrc:"img/tokens.jpg",link:"https://link.clashroyale.com/?action=voucher&code=ca8d436a-5bc4-4ae4-afd2-786d4b753eac",expiryText:"未知",status:"expired"},
     {id:"reward_048",name:"英雄女武神战旗",en:"Hero Valkyrie Banner",imgSrc:"img/banner_hero_valkyrie.png",link:"onlineshop",expiryText:"2026-08-21 17:00",status:"expired"},
     {id:"reward_047",name:"金币50000",en:"50,000 Gold",imgSrc:"img/gold.png",link:"onlineshop",expiryText:"2026-08-14 17:00",status:"expired"},
-    {id:"reward_046",name:"英雄女武神表情",en:"Hero Valkyrie Emote",imgSrc:"img/emote_HERO_VALKYRIE.jpg",link:"https://store.supercell.com/zh-cn/clashroyale?storeCode=HEROVALKYRIE",expiryText:"未知",status:"available"},
+    {id:"reward_046",name:"英雄女武神表情",en:"Hero Valkyrie Emote",imgSrc:"img/emote_HERO_VALKYRIE.jpg",link:"https://store.supercell.com/zh-cn/clashroyale?storeCode=HEROVALKYRIE",expiryText:"未知",status:"expired"},
     {id:"reward_045",name:"浪人战旗套装",en:"Ronin Banner Set",imgSrc:"img/banner_ronin.png",link:"onlineshop",expiryText:"2026-08-07 17:00",status:"expired"},
     {id:"reward_044",name:"英雄狂战士战旗套装",en:"Hero Berserker Banner Set",imgSrc:"img/banner_frame_hero_berserker.png, img/banner_decoration_hero_berserker.png",link:"https://link.clashroyale.com/?action=voucher&code=02873bc1-970b-47f4-996d-e973559464f6",expiryText:"未知",status:"available"},
     {id:"reward_043",name:"武士塔皮",en:"Samurai Tower Skin",imgSrc:"img/tower_skin_samurai.jpg",link:"onlineshop",expiryText:"2026-07-31 17:00",status:"expired"},
@@ -554,7 +580,7 @@ const REWARDS_DATA = [
     {id:"reward_029",name:"赛季骨头代币250",en:"250 Season Bones Tokens",imgSrc:"img/bones.jpg",link:"https://link.clashroyale.com/?action=voucher&code=f0b10899-cec8-4094-8832-104fbd1be7d3",expiryText:"未知",status:"expired"},
     {id:"reward_028",name:"金币50000",en:"50,000 Gold",imgSrc:"img/gold.png",link:"onlineshop",expiryText:"2026-06-19 17:00",status:"expired"},
     {id:"reward_027",name:"进化公主哈欠表情",en:"Evolved Princess Yawn Emote",imgSrc:"img/emote_evo_princess_snoring.png",link:"onlineshop",expiryText:"2026-06-12 17:00",status:"expired"},
-    {id:"reward_026",name:"进化公主战旗套装",en:"Evolved Princess Banner Set",imgSrc:"img/banner_frame_evo_princess.jpg, img/banner_decoration_evo_princess.jpg",link:"https://store.supercell.com/zh-cn/clashroyale?storeCode=PRINCESSEVO%21",expiryText:"未知",status:"available"},
+    {id:"reward_026",name:"进化公主战旗套装",en:"Evolved Princess Banner Set",imgSrc:"img/banner_frame_evo_princess.jpg, img/banner_decoration_evo_princess.jpg",link:"https://store.supercell.com/zh-cn/clashroyale?storeCode=PRINCESSEVO%21",expiryText:"未知",status:"expired"},
     {id:"reward_025",name:"战旗装饰英雄蓝胖",en:"Hero Bowler Banner Decoration",imgSrc:"img/banner_decoration_hero_bowler.png",link:"https://link.clashroyale.com/?action=voucher&code=d978c7f0-b9b4-4c3d-a6a0-644215077f50",expiryText:"未知",status:"expired"},
     {id:"reward_024",name:"一星幸运宝箱*2",en:"1-Star Lucky Chest x2",imgSrc:"img/1_star_lucky_chest_2.png",link:"https://link.clashroyale.com/?action=voucher&code=edcb9757-03de-400d-9ac3-e427ef258bb8",expiryText:"未知",status:"expired"},
     {id:"reward_023",name:"战旗背景英雄蓝胖",en:"Hero Bowler Banner Frame",imgSrc:"img/banner_frame_hero_bowler.png",link:"https://link.clashroyale.com/?action=voucher&code=5900749e-0a86-40de-b0fb-99110d8706bd",expiryText:"未知",status:"expired"},
